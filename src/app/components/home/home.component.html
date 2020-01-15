@@ -1,0 +1,30 @@
+<app-loading *ngIf="cargando"></app-loading>
+
+<app-error [mensaje] = "desError" *ngIf="error"></app-error>
+
+<div class="animated fadeIn" *ngIf="!cargando && !error">
+    <h1>Nuevos estrenos</h1>
+    <div class="card-columns">
+        <div class="card" *ngFor="let album of albumes">
+            <a [href]="album.external_urls.spotify" target="black"><img [src]="album.images | noImage" class="card-img-top"></a>
+            <div class="card-body">
+                <a [href]="album.external_urls.spotify" target="black">
+                    <h5 class="card-title">
+                    {{album.name}} 
+                    <span  [class]="album.album_type == 'single' ? 'badge badge-danger' : 'badge badge-primary'">
+                        {{album.album_type}}
+                    </span>
+                    </h5>
+                </a>
+                <p class="card-text">
+                    Artistas:
+                    <a (click)="verArtista(art.id)" class="badge badge-success puntero" *ngFor="let art of album.artists" target="blanck">{{art.name}}</a>                
+                </p>
+                <p class="card-text" *ngIf="album.album_type == 'album'">
+                    <span class="badge badge-pill badge-warning">Canciones <span class="badge badge-light">{{album.total_tracks}}</span></span>
+                </p>
+                <p class="card-text"><small class="text-muted">{{album.release_date | date:"mediumDate"}}</small></p>
+            </div>
+        </div>
+    </div>
+</div>

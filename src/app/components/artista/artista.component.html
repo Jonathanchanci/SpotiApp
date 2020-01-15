@@ -1,0 +1,88 @@
+<app-loading *ngIf="cargando"></app-loading>
+
+
+
+<div class="card mb-3" *ngIf="!cargando">
+    <div class="row no-gutters">
+      <div class="col-sm-6 col-md-3" >
+        <a [href]="artista.external_urls.spotify" target="_black"><img [src]="artista.images | noImage" class="card-img"></a>
+      </div>
+      <div class="col-sm-6  col-md-9">
+        <div class="card-body">
+          <h3 class="card-title">
+              {{artista.name}}              
+            </h3>
+            <small><a [href] = "artista.external_urls.spotify" target="_black">Ir a página del artista</a></small> 
+            <p class="card-text">
+                <span  class="badge badge-primary">
+                    Seguidores
+                    <span class="badge badge-light">{{artista.followers.total | number}}</span>
+                </span>
+            </p>
+            <p class="card-text">
+                <span  class="badge badge-success">
+                    Popularidad
+                    <span class="badge badge-light">{{artista.popularity}}</span>
+                </span>
+            </p>
+            <p class="card-text" *ngIf="artista.genres.length > 0">
+                Géneros:
+                <span class="badge badge-warning" *ngFor="let genero of artista.genres" target="blanck">{{genero}}</span>                
+            </p>                       
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="mb-5">
+    <h1>Top Tracks</h1>
+    <div class="table-responsive">
+        <table class="table table-dark" >
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Album</th>
+                <th scope="col">Artistas</th>
+                <th scope="col">Canción</th>
+                <th scope="col">Vista previa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let cancion of topTracks; let i = index">
+                <th scope="row">{{ i + 1}} </th>
+                <td><a [href]="cancion.external_urls.spotify" target="_black"><img [src]="cancion.album.images | noImage" class="rounded " width="100"></a></td>
+                <td>
+                    {{cancion.album.name}}                
+                    <span  [class]="cancion.album.album_type == 'single' ? 'badge badge-danger' : 'badge badge-primary'">
+                        {{cancion.album.album_type == 'single' ? 'Single' : 'Album'}}
+                    </span>
+                    <span class="badge badge-pill badge-warning" *ngIf="cancion.album.album_type == 'album'">
+                        Canciones totales 
+                        <span class="badge badge-light">
+                            {{cancion.album.total_tracks}}
+                        </span>
+                    </span>                    
+                </td>
+                <td>
+                    <a (click)="verArtista(artista.id)" class="badge badge-info puntero" *ngFor="let artista of cancion.artists">
+                        {{artista.name}}
+                    </a>
+                </td>
+                <td>
+                    {{cancion.name}}                               
+                    <span class="badge badge-pill badge-success" *ngIf="cancion.album.album_type == 'album'">
+                        Número de canción
+                        <span class="badge badge-light">
+                            {{cancion.track_number}}
+                        </span>
+                    </span>
+                </td>
+                <td>
+                    <audio [src]="cancion.preview_url" controls></audio>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

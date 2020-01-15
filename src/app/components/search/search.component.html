@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col">
+        <input type="text" placeholder="Buscar artista..." class="form-control" #nombre (keyup)="buscar(nombre.value)"/>
+    </div>
+</div>
+<app-loading *ngIf="cargando"></app-loading>
+
+<app-error [mensaje] = "desError" *ngIf="error" class="m-5"></app-error>
+
+<div class="card-columns mt-5" *ngIf="!cargando && !error">
+    <div class="card" *ngFor="let artista of artistas">            
+        <a (click)="verArtista(artista.id)" ><img [src]="artista.images | noImage" class="card-img-top puntero"></a>
+        <div class="card-body">
+            <a (click)="verArtista(artista.id)" class="puntero">
+                <h5 class="card-title">
+                    {{artista.name}} 
+                    <span  class="badge badge-primary">
+                        Seguidores
+                        <span class="badge badge-light">{{artista.followers.total | number}}</span>
+                    </span>
+                </h5>
+            </a>
+            <p class="card-text" *ngIf="artista.genres.length > 0">
+                Géneros:
+                <span class="badge badge-warning" *ngFor="let genero of artista.genres" target="blanck">{{genero}}</span>                
+            </p>
+            <p class="card-text">
+                <span  class="badge badge-success">
+                    Popularidad
+                    <span class="badge badge-light">{{artista.popularity}}</span>
+                </span>
+            </p>
+        </div>                        
+    </div>
+</div>
